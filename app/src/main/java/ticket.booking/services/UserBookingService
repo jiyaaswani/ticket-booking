@@ -25,9 +25,17 @@ public class UserBookingService{
 
     public UserBookingService(User user1) throws IOException{
         this.user = user1;
+        loadUsers();
+    }
+
+    public UserBookingService() throws IOException{
+        loadUsers();
+    }
+
+    public List<User> loadUsers(){
         File users = new File(USERS_PATH);
 
-        userList = objectMapper.readValue(users, new TypeReference<List<User>>() {});
+        return objectMapper.readValue(users, new TypeReference<List<User>>() {});
     }
 
     public Boolean loginUser(){
@@ -52,6 +60,26 @@ public class UserBookingService{
         objectMapper.writeValue(usersFile,userList);
     }
     
-    
+    public void fetchBooking(){
+        user.printTickets();
+    }
 
+    public Boolean cancelBooking(String ticketID){
+        //todo complete this
+        return Boolean.FALSE;
+    }
+
+    public List<Train> getTrains(String source,String destination){
+        try{
+            TrainService trainService = new TrainService();
+            return trainService.searchTrains(source, destination);
+        }catch(IOException ex){
+            return new ArrayList<>();
+        }
+        
+    }
+
+    public List<List<Integer>> fetchSeats(Train train){
+        return train.getSeats();
+    }
 }
