@@ -65,8 +65,29 @@ public class UserBookingService{
     }
 
     public Boolean cancelBooking(String ticketID){
-        //todo complete this
-        return Boolean.FALSE;
+        Scanner s = new Scanner();
+        System.out.println("Enter ticketID of ticket to cancel");
+        ticketID = s.next();
+
+        if(ticketID == null || ticketID.isEmpty()){
+            System.out.println("ticketID cannot be null or empty");
+            return Boolean.FALSE;
+        }
+
+        String finalticketID1 = ticketID; //strings are immutable
+        boolean removed = user.getTicketsBooked().removeIf(ticket -> ticket.getTicketId().equals(finalticketID1))
+    
+        String finalticketID = ticketID;
+        user.getTicketsBooked().removeIf(Ticket -> Ticket.getTicketId().equals(finalticketID))
+        if(removed){
+            System.out.println("Ticket with Id " + ticketID + " has been cancelled.");
+            return Boolean.TRUE;
+        }
+        else{
+            System.out.println("No ticket found with Id " + ticketID);
+            return Boolean.FALSE;
+        }
+
     }
 
     public List<Train> getTrains(String source,String destination){
@@ -81,5 +102,28 @@ public class UserBookingService{
 
     public List<List<Integer>> fetchSeats(Train train){
         return train.getSeats();
+    }
+
+    public Boolean bookTrainSeat(Train train,int row,int seat){
+        try{
+            TrainService trainService = new TrainService();
+            List<List<Integer>> = Train.getSeats();
+            if(row >= 0 && row < seats.size() && seat >= 0 && seats.get(row).size()){
+                if(seats.get(row).get(seat) == 0){
+                    seats.get(row).set(seat, 1);
+                    train.setSeats(seats);
+                    trainService.addTrain(train);
+                    return true; //booking done
+                }
+                else{
+                    return false; //seat is booked already
+                }
+            else{
+                return false; //invalid row or seat index
+            }
+            }
+        }catch(IOException ex){
+            return Boolean.FALSE;
+        }
     }
 }
