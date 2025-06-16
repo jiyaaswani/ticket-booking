@@ -57,16 +57,47 @@ public class App{
                 UserBookingService.fetchBooking();
                 break;
             case 4:
-                
+                System.out.println("Type your source station");
+                String source = scanner.next();
+                System.out.println("Type your destination station");
+                String dest = scanner.next();
+                List<Train> trains = UserBookingService.getTrains(source,dest);
+                int index = 1;
+                for(Train t: trains){
+                    System.out.println(index+" TrainId "+t.getTrainId());
+                    for(Map.Entry<String,String> entry: t.getStationTimes().entrySet()){
+                        System.out.println("station "+entry.getKey()+" time "+entry.getValue());
+                    }
+                }
+                System.out.println("select train by typing 1,2,3,...");
+                trainSelectedForBooking = trains.get(scanner.nextInt());
+                break;
+            case 5:
+                System.out.println("select a seat out of these seats");
+                List<List<Integer>> seats = userBookingService.fetchSeats(trainSelectedForBooking);
+                for(List<Integer> row: seats){
+                    for(Integer val: row){
+                        System.out.println(val+" ");
+                    }
+                    System.out.println();
+                }
+                System.out.println("select seat by typing row and column");
+                System.out.println("Enter row");
+                int row = scanner.nextInt();
+                System.out.println("Enter column");
+                int column = scanner.nextInt();
+                System.out.println("Booking your seat...");
+                Boolean booked = userBookingService.bookTrainSeat(trainSelectedForBooking,row,column);
+                if(booked.equals(Boolean.TRUE)){
+                    System.out.println("Booked!");
+                }
+                else{
+                    System.out.println("Cannot book this seat!");
+                }
+                break;
             default:
                 break;
         }
     }
-
-
-
-
-
-
-
+  }
 }
